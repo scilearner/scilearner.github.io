@@ -1,0 +1,74 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>百年历史事件时间轴</title>
+
+    <script src="./static/vis-timeline-graph2d.min.js"></script>
+    <link href="./static/vis-timeline-graph2d.min.css" rel="stylesheet" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+
+</head>
+
+<body data-gr-c-s-loaded="true">
+
+    <h3>百年事件 历史长河</h3>
+    <div style="overflow: hidden; height: 75%">
+        <div id="china">
+
+        </div>
+        <div id="inter">
+
+        </div>
+    </div>
+
+    <div>
+        <div id="mytimeline" style="height: 15%"></div>
+        <input type="button" id="back" value="返回开头">
+        <input type="button" id="start" value="开始">
+        <input type="text" id="time" value="60">
+    </div>
+
+    <script>
+        var container = document.getElementById('mytimeline');
+            var global_data = null;
+            var global_items = [];
+            $.get("./history.csv", function (data) {
+                global_data = data;
+                var lines = data.split('\n')
+
+                var items = new vis.DataSet();
+                for (var i = 1; i < lines.length - 1; i++) {
+                    fields = lines[i].split(',')
+                    items.add({
+                        id: i,
+                        content: fields[1],
+                        start: new Date(fields[0])
+                    });
+                    global_items.push(fields);
+                }
+
+                // Configuration for the Timeline
+                // specify options
+                var options = {
+                    start: new Date('1919/01/01'),
+                    end: new Date('1929/01/01'),
+                };
+
+                // create a Timeline
+                timeline = new vis.Timeline(container, items, null, options);
+                start_point = new Date('1919/05/04')
+                walker_id = timeline.addCustomTime(start_point, 'walker');
+            });
+            document.getElementById('start').onclick = function () {
+                timeline.moveTo('2019-10-01', { animation: { duration: $("#time").val() * 1000, easingFunction: 'linear' } });
+            };
+            document.getElementById('back').onclick = function () {
+                timeline.moveTo('1919-05-04');
+            };
+        </script>
+</body>
+
+</html>
