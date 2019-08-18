@@ -29,11 +29,15 @@
         <div id="mytimeline" style="height: 15%"></div>
         <input type="button" id="back" value="返回开头">
         <input type="button" id="start" value="开始">
+        <input type="button" id="stop" value="停止">
         <input type="text" id="time" value="180">
     </div>
 
     <script>
 document.getElementById('start').onclick = function () {
+    stop();
+};
+document.getElementById('stop').onclick = function () {
     me = timeline;
     update();
 };
