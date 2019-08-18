@@ -35,11 +35,11 @@
 
     <script>
 document.getElementById('start').onclick = function () {
-    stop();
-};
-document.getElementById('stop').onclick = function () {
     me = timeline;
     update();
+};
+document.getElementById('stop').onclick = function () {
+    stop();
 };
 document.getElementById('back').onclick = function () {
     timeline.moveTo('1919-05-04');
