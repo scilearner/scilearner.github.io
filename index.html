@@ -9,6 +9,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 
+    <script src="./static/index.js"></script>
 
 </head>
 
@@ -16,8 +17,8 @@
 
     <h3>百年事件 历史长河</h3>
     <div style="overflow: hidden; height: 75%">
-        <div id="china">
-            <img src="http://pic.wodingche.com/carimg/bpfiefz.jpeg" alt="">
+        <div>
+            <img id="china" src="http://pic.wodingche.com/carimg/bpfiefz.jpeg" alt="">
         </div>
         <div id="inter">
 
@@ -28,77 +29,48 @@
         <div id="mytimeline" style="height: 15%"></div>
         <input type="button" id="back" value="返回开头">
         <input type="button" id="start" value="开始">
-        <input type="text" id="time" value="60">
+        <input type="text" id="time" value="180">
     </div>
 
     <script>
-        var container = document.getElementById('mytimeline');
-        var global_data = null;
-        var global_items = [];
-        var timeline = null;
-        currentTimeTimer = null;
-        start_point = null;
-        end_point = null;
-        $.get("./history.csv", function (data) {
-            global_data = data;
-            var lines = data.split('\n')
+document.getElementById('start').onclick = function () {
+    me = timeline;
+    update();
+};
+document.getElementById('back').onclick = function () {
+    timeline.moveTo('1919-05-04');
+    stop();
+    timeline.customTimes[0].setCustomTime(new Date(global_data.split('\n')[1].split(",")[0]));
+};
+var container = document.getElementById('mytimeline');
+$.get("./history.csv", function (data) {
+    global_data = data;
+    var lines = data.split('\n')
 
-            var items = new vis.DataSet();
-            for (var i = 3; i < lines.length - 1; i++) {
-                fields = lines[i].split(',')
-                items.add({
-                    id: i,
-                    content: fields[1],
-                    start: new Date(fields[0])
-                });
-                global_items.push(fields);
-            }
-
-            // Configuration for the Timeline
-            // specify options
-            start_point = new Date(lines[1].split(",")[0])
-            end_point = new Date(lines[2].split(",")[0])
-            var options = {
-                start: start_point,
-                end: new Date(start_point.getTime() + 12 * 30 * 24 * 60 * 60 * 1000),
-            };
-
-            // create a Timeline
-            timeline = new vis.Timeline(container, items, null, options);
-            walker_id = timeline.addCustomTime(start_point, 'walker');
+    var items = new vis.DataSet();
+    for (var i = 2; i < lines.length - 2; i++) {
+        fields = lines[i].split(',')
+        items.add({
+            id: i,
+            content: fields[1],
+            start: new Date(fields[0])
         });
-        function stop() {
-            if (this.currentTimeTimer !== undefined) {
-                clearTimeout(this.currentTimeTimer);
-                delete this.currentTimeTimer;
-            }
-        }
-        document.getElementById('start').onclick = function () {
-            // timeline.moveTo('2019-10-01', { animation: { duration: $("#time").val() * 1000, easingFunction: 'linear' } });
-            me = timeline;
+        global_items.push(fields);
+    }
 
-            function update() {
-                stop();
-                // determine interval to refresh
-                current_time = timeline.customTimes[0].getCustomTime();
-                if (current_time.getTime() > end_point.getTime()) return;
+    // Configuration for the Timeline
+    // specify options
+    start_point = new Date(lines[1].split(",")[0])
+    end_point = new Date(lines[lines.length - 1].split(",")[0])
+    var options = {
+        start: start_point,
+        end: new Date(start_point.getTime() + 12 * 30 * 24 * 60 * 60 * 1000),
+    };
 
-                let interval = 40;
-                const scale = (end_point.getTime() - start_point.getTime()) / interval / $("#time").val();
-                timeline.customTimes[0].setCustomTime(new Date(current_time.getTime() + scale));
-
-                // start a renderTimer to adjust for the new time
-                currentTimeTimer = setTimeout(update, interval);
-            }
-
-            update();
-        };
-        document.getElementById('back').onclick = function () {
-            timeline.moveTo('1919-05-04');
-            stop();
-            timeline.customTimes[0].setCustomTime(new Date(global_data.split('\n')[1].split(",")[0]));
-        };
-
+    // create a Timeline
+    timeline = new vis.Timeline(container, items, null, options);
+    walker_id = timeline.addCustomTime(start_point, 'walker');
+});
     </script>
 </body>
 
