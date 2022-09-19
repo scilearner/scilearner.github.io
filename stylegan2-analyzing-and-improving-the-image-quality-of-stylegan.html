@@ -10,13 +10,20 @@
         <meta property="og:type" content="article" />
         <meta name="twitter:card" content="summary">
 
-<meta property="og:title" content="ThinkNotClear"/>
-<meta name="twitter:title" content="ThinkNotClear">
-<meta property="og:url" content="papernotclear" />
+<meta name="keywords" content="paper, generator, GAN, paper, " />
+
+<meta property="og:title" content="StyleGAN2: Analyzing and Improving the Image Quality of StyleGAN "/>
+<meta property="og:url" content="papernotclear/stylegan2-analyzing-and-improving-the-image-quality-of-stylegan.html" />
+<meta property="og:description" content="概述 归一化 缺点： 造成 blob 或 corrupted 的图片 方法： 移除 AdaIN里的bias， 即只保留 std Demodulation 移除 normalization操作， 转成 w -&gt; w&#39; = s w -&gt; w&#39;&#39; = w&#39;/ $\sqrt{\sum w&#39;}$ 正则化 PPL(perceptual path length)跟感知 …" />
 <meta property="og:site_name" content="ThinkNotClear" />
 <meta property="og:article:author" content="ThinkNotClear" />
+<meta property="og:article:published_time" content="2022-09-19T00:00:00+08:00" />
+<meta name="twitter:title" content="StyleGAN2: Analyzing and Improving the Image Quality of StyleGAN ">
+<meta name="twitter:description" content="概述 归一化 缺点： 造成 blob 或 corrupted 的图片 方法： 移除 AdaIN里的bias， 即只保留 std Demodulation 移除 normalization操作， 转成 w -&gt; w&#39; = s w -&gt; w&#39;&#39; = w&#39;/ $\sqrt{\sum w&#39;}$ 正则化 PPL(perceptual path length)跟感知 …">
 
-        <title>ThinkNotClear - Articles by ThinkNotClear</title>
+
+        <title>StyleGAN2: Analyzing and Improving the Image Quality of StyleGAN  · ThinkNotClear
+</title>
 
         <style>
             body { padding-top: 50px; padding-bottom: 10px; }
@@ -78,62 +85,118 @@
         <div class="container-fluid">
             <div class="row-fluid">
                 <div class="span12">
-<div class="row-fluid span8 offset2">
 
-    <div class="row-fluid">
-
-    </div>
-
-    <div class="row-fluid">
-        <div class="span8 offset2">
-            <header>
-            <h1 id="recent-posts">Recent Posts <a id="allposts" href="/archives.html">all posts</a></h1>
+        <link rel="stylesheet" type="text/css" href="static/css/tutorial.css">
+        <script type="text/javascript" src="/theme/js/scrollspy.js"> </script>
+        <script type="text/javascript" src="/theme/js/jQuery.md5.js"> </script>
+        <script type="text/javascript">
+		$(document).ready(function() {
+            initScrollSpy();
+		});
+      
+    	</script>
+        
+        <div class="hint">
+            <ul class="flashes">
+            </ul>
+        </div>
+        
+        <article>
+            <header class="page-header span12 text-center">
+                <h1>
+                    <a href="/stylegan2-analyzing-and-improving-the-image-quality-of-stylegan.html">
+                        StyleGAN2: Analyzing and Improving the Image Quality of StyleGAN  
+                    </a>
+                </h1>
             </header>
-        <div class="recent-posts">
-            <article>
-                <a href="/score-matching-estimation-of-non-normalized-statistical-models-by-score-matching.html">Score Matching: Estimation of non-normalized statistical models by score matching  </a>
-                <section>
-                    posted in
-                <a href="/categories.html#paper-ref">paper</a>
-                <div class="recent-posts-time">
-                <time pubdate="pubdate" datetime="2022-09-19T00:00:00+08:00">Mon 19 September 2022</time>
-                </div>
-                </section>
-            </article>
-            <article>
-                <a href="/stylegan2-analyzing-and-improving-the-image-quality-of-stylegan.html">StyleGAN2: Analyzing and Improving the Image Quality of StyleGAN  </a>
-                <section>
-                    posted in
-                <a href="/categories.html#paper-ref">paper</a>
-                <div class="recent-posts-time">
-                <time pubdate="pubdate" datetime="2022-09-19T00:00:00+08:00">Mon 19 September 2022</time>
-                </div>
-                </section>
-            </article>
-            <article>
-                <a href="/stylegan-a-style-based-generator-architecture-for-generative-adversarial-networks.html">StyleGAN: A Style-Based Generator Architecture for Generative Adversarial Networks  </a>
-                <section>
-                    posted in
-                <a href="/categories.html#paper-ref">paper</a>
-                <div class="recent-posts-time">
-                <time pubdate="pubdate" datetime="2022-09-18T00:00:00+08:00">Sun 18 September 2022</time>
-                </div>
-                </section>
-            </article>
-            <article>
-                <a href="/jem-your-classifier-is-secretely-an-energy-based-model.html">JEM: Your Classifier is secretely an Energy Based Model  </a>
-                <section>
-                    posted in
-                <a href="/categories.html#paper-ref">paper</a>
-                <div class="recent-posts-time">
-                <time pubdate="pubdate" datetime="2022-09-10T00:00:00+08:00">Sat 10 September 2022</time>
-                </div>
-                </section>
-            </article>
-        </div>
-        </div>
-    </div>
+
+            <div class="row-fluid article-inner">
+                <div class="span2 table-of-content">
+                    <nav class="bs-docs-sidebar hidden-print hidden-xs
+                        hidden-sm nav table-nav">
+                        <div class="table-collapse panel-collapse collapse">
+                            <h4 style="text-align: center;">目录</h4>
+                            <div class="toc"><span class="toctitle">Table of Contents</span><ul>
+<li><a href="#_1">概述</a><ul>
+<li><a href="#_2">归一化</a></li>
+<li><a href="#demodulation">Demodulation</a></li>
+<li><a href="#_3">正则化</a></li>
+</ul>
+</li>
+</ul>
 </div>
+                        </div>
+                    </nav>
+                </div>
+                <a class="btn btn-success btn-table" data-toggle="collapse"
+                    data-target=".table-collapse">
+                    目录
+                </a>
+                <div class="span8 article-content">
+
+                        
+                        
+<h1 id="_1">概述</h1>
+<h2 id="_2">归一化</h2>
+<p>缺点： 造成 blob 或 corrupted 的图片</p>
+<p>方法： 移除 AdaIN里的bias， 即只保留 std</p>
+<h2 id="demodulation">Demodulation</h2>
+<p>移除 normalization操作， 转成 w -&gt; w' = s w -&gt; w'' = w'/ $\sqrt{\sum w'}$</p>
+<p><img alt="2_norm" src="images/stylegan2_normalization.png"/></p>
+<h2 id="_3">正则化</h2>
+<p>PPL(perceptual path length)跟感知图像质量的关系</p>
+                        
+                        <div class="bdsharebuttonbox bdshare-button-style1-24" data-bd-bind="1444449175032">
+                    <a href="#" class="bds_more" data-cmd="more"></a>
+                    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+                    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+                    <a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a>
+                    <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+                    <a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+                </div>
+
+                    <!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2130941"></script>
+<!-- UY END -->
+
+                    <hr/>
+                </div>
+                <div class="span2 right-side" style="float:right;font-size:0.9em;">
+                    <h4>Published</h4>
+                    <time pubdate="pubdate" datetime="2022-09-19T00:00:00+08:00">Sep 19, 2022</time>
+                    <h4>Category</h4>
+                    <a class="category-link" href="/categories.html#paper-ref">paper</a>
+                    <h4>Tags</h4>
+                    <ul class="list-of-tags tags-in-article">
+                        <li><a href="/tags.html#gan-ref">GAN
+                            <span>2</span>
+</a></li>
+                        <li><a href="/tags.html#generator-ref">generator
+                            <span>4</span>
+</a></li>
+                        <li><a href="/tags.html#paper-ref">paper
+                            <span>4</span>
+</a></li>
+                    </ul>
+                </div>
+            </div>
+        </article>
+        <!-- <script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script> -->
+        <script src="https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_HTMLorMML" type="application/javascript"></script>
+        <script type="text/x-mathjax-config">
+            MathJax.Hub.Config({
+              tex2jax: {
+                inlineMath: [['$','$'], ['\\(','\\)']],
+                displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+              },
+            });
+        </script>
+        <script>
+            $(function (){
+                renderQuoteTip();
+            });
+        </script>
                 </div>
             </div>
         </div>
@@ -150,13 +213,15 @@
         <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a></li>
     </ul>
 </div>
-</footer>        
+</footer>            
         <script>
             function validateForm(query)
             {
                 return (query.length > 0);
             }
         </script>
+
+    
         <!-- <script src="//cdn.bootcss.com/bootstrap/2.3.2/js/bootstrap.min.js"></script> -->
         <script src="/theme/bootstrap/js/bootstrap.min.js"></script>
         <!-- <script src="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/bootstrap/5.1.3/js/bootstrap.min.js" type="application/javascript"></script> -->
