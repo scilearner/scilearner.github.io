@@ -5,29 +5,43 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/</loc>
-<lastmod>2022-09-22T10:55:15-00:00</lastmod>
+<lastmod>2022-09-22T17:24:11-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/archives.html</loc>
-<lastmod>2022-09-22T10:55:15-00:00</lastmod>
+<lastmod>2022-09-22T17:24:11-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/tags.html</loc>
-<lastmod>2022-09-22T10:55:15-00:00</lastmod>
+<lastmod>2022-09-22T17:24:11-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/categories.html</loc>
-<lastmod>2022-09-22T10:55:15-00:00</lastmod>
+<lastmod>2022-09-22T17:24:11-00:00</lastmod>
 <changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/diffusion-models-for-adversarial-purification.html</loc>
+<lastmod>2022-09-22T00:00:00+08:00</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/stylegan2-ada-training-generative-adversarial-networks-with-limited-data.html</loc>
+<lastmod>2022-09-22T00:00:00+08:00</lastmod>
+<changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
@@ -82,28 +96,42 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/category/paper.html</loc>
-<lastmod>2022-09-21T00:00:00+08:06</lastmod>
+<lastmod>2022-09-22T00:00:00+08:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/tag/paper.html</loc>
-<lastmod>2022-09-21T00:00:00+08:06</lastmod>
+<lastmod>2022-09-22T00:00:00+08:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>/tag/generator.html</loc>
-<lastmod>2022-09-21T00:00:00+08:06</lastmod>
+<loc>/tag/adversarial.html</loc>
+<lastmod>2022-09-22T00:00:00+08:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/tag/diffusion.html</loc>
-<lastmod>2022-09-21T00:00:00+08:06</lastmod>
+<lastmod>2022-09-22T00:00:00+08:06</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/tag/generator.html</loc>
+<lastmod>2022-09-22T00:00:00+08:06</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>/tag/gan.html</loc>
+<lastmod>2022-09-22T00:00:00+08:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -111,13 +139,6 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>/tag/score-matching.html</loc>
 <lastmod>2022-09-21T00:00:00+08:06</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.5</priority>
-</url>
-
-<url>
-<loc>/tag/gan.html</loc>
-<lastmod>2022-09-19T00:00:00+08:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -131,7 +152,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/author/thinknotclear.html</loc>
-<lastmod>2022-09-21T00:00:00+08:06</lastmod>
+<lastmod>2022-09-22T00:00:00+08:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
