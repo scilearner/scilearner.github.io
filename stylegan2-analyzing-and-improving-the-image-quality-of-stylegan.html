@@ -14,12 +14,12 @@
 
 <meta property="og:title" content="StyleGAN2: Analyzing and Improving the Image Quality of StyleGAN "/>
 <meta property="og:url" content="/stylegan2-analyzing-and-improving-the-image-quality-of-stylegan.html" />
-<meta property="og:description" content="概述 stylegan 归一化 缺点： 造成 blob 或 corrupted 的图片 方法： 移除 AdaIN里的bias， 即只保留 std Demodulation 移除 normalization操作， 转成 w -&gt; w&#39; = s w -&gt; w&#39;&#39; = w&#39;/ $\sqrt{\sum w&#39;}$ 正则化 PPL(perceptual path length)跟感 …" />
+<meta property="og:description" content="概述 stylegan 改进 AdaIN 造成的气泡点 归一化 原版: 第i层AdaIN $AdaIN(x, y_i) = y_{s,i} \frac{x - \mu(x)}{\sigma(x)} + y_{b, i}$ , 其中 $y_i = (y_{s, i}, y_{b, i}) = A_i (w), w = 8MLP(z)$ 缺点 …" />
 <meta property="og:site_name" content="ThinkNotClear" />
 <meta property="og:article:author" content="ThinkNotClear" />
 <meta property="og:article:published_time" content="2022-09-19T00:00:00+08:00" />
 <meta name="twitter:title" content="StyleGAN2: Analyzing and Improving the Image Quality of StyleGAN ">
-<meta name="twitter:description" content="概述 stylegan 归一化 缺点： 造成 blob 或 corrupted 的图片 方法： 移除 AdaIN里的bias， 即只保留 std Demodulation 移除 normalization操作， 转成 w -&gt; w&#39; = s w -&gt; w&#39;&#39; = w&#39;/ $\sqrt{\sum w&#39;}$ 正则化 PPL(perceptual path length)跟感 …">
+<meta name="twitter:description" content="概述 stylegan 改进 AdaIN 造成的气泡点 归一化 原版: 第i层AdaIN $AdaIN(x, y_i) = y_{s,i} \frac{x - \mu(x)}{\sigma(x)} + y_{b, i}$ , 其中 $y_i = (y_{s, i}, y_{b, i}) = A_i (w), w = 8MLP(z)$ 缺点 …">
 
 
         <title>StyleGAN2: Analyzing and Improving the Image Quality of StyleGAN  · ThinkNotClear
@@ -118,8 +118,10 @@
                             <h4 style="text-align: center;">目录</h4>
                             <div class="toc"><span class="toctitle">Table of Contents</span><ul>
 <li><a href="#_1">概述</a><ul>
-<li><a href="#_2">归一化</a></li>
+<li><a href="#_2">归一化</a><ul>
 <li><a href="#demodulation">Demodulation</a></li>
+</ul>
+</li>
 <li><a href="#_3">正则化</a></li>
 </ul>
 </li>
@@ -138,10 +140,16 @@
                         
 <h1 id="_1">概述</h1>
 <p><a href="/stylegan-a-style-based-generator-architecture-for-generative-adversarial-networks.html">stylegan</a></p>
+<ol>
+<li>改进 AdaIN 造成的气泡点</li>
+<li></li>
+</ol>
 <h2 id="_2">归一化</h2>
-<p>缺点： 造成 blob 或 corrupted 的图片</p>
-<p>方法： 移除 AdaIN里的bias， 即只保留 std</p>
-<h2 id="demodulation">Demodulation</h2>
+<p>原版:  第i层AdaIN $AdaIN(x, y_i) = y_{s,i} \frac{x - \mu(x)}{\sigma(x)} + y_{b, i}$ ,  其中  $y_i = (y_{s, i}, y_{b, i}) = A_i (w),  w = 8MLP(z)$</p>
+<p>缺点： 生成 blob有气泡部位 或 corrupted异常 的图片</p>
+<p>改进一 移除 AdaIN里的平移项bias $y_b$， 即只保留 scaling项 $y_s$  作用类似 std 
+改进二  Demodulation</p>
+<h3 id="demodulation">Demodulation</h3>
 <p>移除 normalization操作， 转成 w -&gt; w' = s w -&gt; w'' = w'/ $\sqrt{\sum w'}$</p>
 <p><img alt="2_norm" src="images/stylegan2_normalization.png"/></p>
 <h2 id="_3">正则化</h2>
@@ -174,10 +182,10 @@
                             <span>2</span>
 </a></li>
                         <li><a href="/tags.html#generator-ref">generator
-                            <span>4</span>
+                            <span>7</span>
 </a></li>
                         <li><a href="/tags.html#paper-ref">paper
-                            <span>4</span>
+                            <span>7</span>
 </a></li>
                     </ul>
                 </div>

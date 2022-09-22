@@ -10,19 +10,19 @@
         <meta property="og:type" content="article" />
         <meta name="twitter:card" content="summary">
 
-<meta name="keywords" content="paper, generator, GAN, paper, " />
+<meta name="keywords" content="paper, generator, Diffusion, score matching, paper, " />
 
-<meta property="og:title" content="StyleGAN: A Style-Based Generator Architecture for Generative Adversarial Networks "/>
-<meta property="og:url" content="/stylegan-a-style-based-generator-architecture-for-generative-adversarial-networks.html" />
-<meta property="og:description" content="概述 bilinear up/down sampling, 更长的训练， 调参 应用 AdaIN 到 Progressive GAN w = 8层MLP(z), 再用 A(w)-&gt;scale,bias of AdaIN 移除过去的 z输入给conv， 变成 固定的 Noise 作为 stochastic variantion 控制细节 …" />
+<meta property="og:title" content="Score-Based Generative Modeling through Stochastic Differential Equations "/>
+<meta property="og:url" content="/score-based-generative-modeling-through-stochastic-differential-equations.html" />
+<meta property="og:description" content="概述 Using SDE and reverse-time SDE in continous domain. Generalize Score matching and Diffusion to inifinite T. Two SDEs to use Train like Denoising Score Matching or DDPM. Sliced Score matching also works. Inference/Generation: Propose Predictor-Corrector sampler (SDE Solver + MCMC) Propose a Deterministic sampler, call “probability flow ordinary …" />
 <meta property="og:site_name" content="ThinkNotClear" />
 <meta property="og:article:author" content="ThinkNotClear" />
-<meta property="og:article:published_time" content="2022-09-18T00:00:00+08:00" />
-<meta name="twitter:title" content="StyleGAN: A Style-Based Generator Architecture for Generative Adversarial Networks ">
-<meta name="twitter:description" content="概述 bilinear up/down sampling, 更长的训练， 调参 应用 AdaIN 到 Progressive GAN w = 8层MLP(z), 再用 A(w)-&gt;scale,bias of AdaIN 移除过去的 z输入给conv， 变成 固定的 Noise 作为 stochastic variantion 控制细节 …">
+<meta property="og:article:published_time" content="2022-09-21T00:00:00+08:00" />
+<meta name="twitter:title" content="Score-Based Generative Modeling through Stochastic Differential Equations ">
+<meta name="twitter:description" content="概述 Using SDE and reverse-time SDE in continous domain. Generalize Score matching and Diffusion to inifinite T. Two SDEs to use Train like Denoising Score Matching or DDPM. Sliced Score matching also works. Inference/Generation: Propose Predictor-Corrector sampler (SDE Solver + MCMC) Propose a Deterministic sampler, call “probability flow ordinary …">
 
 
-        <title>StyleGAN: A Style-Based Generator Architecture for Generative Adversarial Networks  · ThinkNotClear
+        <title>Score-Based Generative Modeling through Stochastic Differential Equations  · ThinkNotClear
 </title>
 
         <style>
@@ -104,8 +104,8 @@
         <article>
             <header class="page-header span12 text-center">
                 <h1>
-                    <a href="/stylegan-a-style-based-generator-architecture-for-generative-adversarial-networks.html">
-                        StyleGAN: A Style-Based Generator Architecture for Generative Adversarial Networks  
+                    <a href="/score-based-generative-modeling-through-stochastic-differential-equations.html">
+                        Score-Based Generative Modeling through Stochastic Differential Equations  
                     </a>
                 </h1>
             </header>
@@ -118,6 +118,15 @@
                             <h4 style="text-align: center;">目录</h4>
                             <div class="toc"><span class="toctitle">Table of Contents</span><ul>
 <li><a href="#_1">概述</a></li>
+<li><a href="#unified-framework">Unified Framework</a><ul>
+<li><a href="#two-detailed-sdes-for-the-framework">Two detailed SDEs for the framework</a></li>
+</ul>
+</li>
+<li><a href="#training">Training</a></li>
+<li><a href="#inferencegenerationsampling-after-training">Inference/Generation/Sampling after training</a></li>
+<li><a href="#deterministic-sampler">Deterministic sampler</a></li>
+<li><a href="#architecture-of-u-net">Architecture of U-Net</a></li>
+<li><a href="#controllable-generation">Controllable Generation</a></li>
 </ul>
 </div>
                         </div>
@@ -133,14 +142,48 @@
                         
 <h1 id="_1">概述</h1>
 <ol>
-<li>bilinear up/down sampling, 更长的训练， 调参</li>
-<li>应用 AdaIN 到 Progressive GAN</li>
-<li>w = 8层MLP(z),  再用 A(w)-&gt;scale,bias of AdaIN</li>
-<li>移除过去的 z输入给conv， 变成 固定的</li>
-<li>Noise 作为 stochastic variantion 控制细节变化</li>
-<li>mixing regularization. 部分数据使用 style mixing生成的图片</li>
+<li>Using SDE and reverse-time SDE in continous domain.</li>
+<li>Generalize Score matching and Diffusion to inifinite T.</li>
+<li>Two SDEs to use</li>
+<li>Train like Denoising Score Matching or DDPM.  Sliced Score matching also works.</li>
+<li>Inference/Generation: Propose Predictor-Corrector sampler (SDE Solver + MCMC)</li>
+<li>Propose a Deterministic sampler, call “probability flow ordinary DE (ODE)”.</li>
+<li>Architecture Improvements</li>
+<li>class-conditional generation, image imputation and colorization</li>
 </ol>
-<p><img alt="stylegan" src="images/stylegan.png"/></p>
+<h1 id="unified-framework">Unified Framework</h1>
+<p>The authors proposed a unified framework generalizes score matching <a href="/ncsn-generative-modeling-by-estimating-gradients-of-the-data-distribution.html">NCSN</a>  and <a href="/ddpm-denoising-diffusion-probabilistic-models.html">DDPM</a></p>
+<p>It uses Stochastic Differential Equation(SDE) <a href="[https://www.bilibili.com/video/BV1At4y197FG](https://www.bilibili.com/video/BV1At4y197FG)">SDE 中文</a> and reverse-time SDE (<a href="[https://ludwigwinkler.github.io/blog/ReverseTimeAnderson/](https://ludwigwinkler.github.io/blog/ReverseTimeAnderson/)">derivation English</a>) to extend discrete T (&gt;1000) to infinite continuous T.</p>
+<p>The general form of SDE is: $d\boldsymbol{x} = f(\boldsymbol{x}, t) dt \;\;\;\; + G(\boldsymbol{x}, t) d\boldsymbol{w}$ 
+Compared to the diffusion: $x_t \sim \mathcal{N}(\sqrt{1-\beta_t} x_{t-1}, \;\; \beta_t \boldsymbol{I})$ </p>
+<h2 id="two-detailed-sdes-for-the-framework">Two detailed SDEs for the framework</h2>
+<ol>
+<li>Variance Exploding (VE) SDE: $dx = \sqrt{\frac{d [\sigma^2(t)]}{dt}}dw$ , derived from the Markov Chain: $x_i = x_{i-1} + \sqrt{\sigma_i^2  - \sigma_{i-1}^2} z_{i-1}$,  where $z_{i-1} \sim \mathcal{N}(0, \boldsymbol{I})$ . </li>
+<li>Variance Preserving (VP) SDE: $dx = -1/2 \beta(t) x dt + \sqrt{\beta(t)} dw$, derived from DDPM's discrete Markov chain.</li>
+</ol>
+<h1 id="training">Training</h1>
+<p>Train a time-dependent score-based model Eq 7, similar to denoising score matching and also DDPM</p>
+<h1 id="inferencegenerationsampling-after-training">Inference/Generation/Sampling after training</h1>
+<ol>
+<li>Apply general SDE Sampler</li>
+<li>Propose Predictor-Corrector sampler (SDE Solver + MCMC)</li>
+</ol>
+<h1 id="deterministic-sampler">Deterministic sampler</h1>
+<p>They proposed a Deterministic sampler, called "probability flow ordinary DE (ODE)"</p>
+<p>Advantages (v.s. Stochastic sample):</p>
+<ol>
+<li>Exact likelihood computation (DDPM has its own computation, iDDPM improves the results)</li>
+<li>Manipulating latent representations, for image editing, such as interpolation, and temperature scaling.</li>
+<li>Uniquely identifiable encoding</li>
+<li>Efficient sampling, reduce T&gt;1000 -&gt; T&lt;100.</li>
+</ol>
+<h1 id="architecture-of-u-net">Architecture of U-Net</h1>
+<p>In Appendix H</p>
+<p>5 different improvents</p>
+<p>And Exponential Moving Average</p>
+<h1 id="controllable-generation">Controllable Generation</h1>
+<p>By solving a conditional reverse-time SDE.</p>
+<p>Tasks: class-conditional generation, image imputation and colorization</p>
                         
                         <!-- <div class="bdsharebuttonbox bdshare-button-style1-24" data-bd-bind="1444449175032">
                     <a href="#" class="bds_more" data-cmd="more"></a>
@@ -160,12 +203,12 @@
                 </div>
                 <div class="span2 right-side" style="float:right;font-size:0.9em;">
                     <h4>Published</h4>
-                    <time pubdate="pubdate" datetime="2022-09-18T00:00:00+08:00">Sep 18, 2022</time>
+                    <time pubdate="pubdate" datetime="2022-09-21T00:00:00+08:00">Sep 21, 2022</time>
                     <h4>Category</h4>
                     <a class="category-link" href="/categories.html#paper-ref">paper</a>
                     <h4>Tags</h4>
                     <ul class="list-of-tags tags-in-article">
-                        <li><a href="/tags.html#gan-ref">GAN
+                        <li><a href="/tags.html#diffusion-ref">Diffusion
                             <span>2</span>
 </a></li>
                         <li><a href="/tags.html#generator-ref">generator
@@ -173,6 +216,9 @@
 </a></li>
                         <li><a href="/tags.html#paper-ref">paper
                             <span>7</span>
+</a></li>
+                        <li><a href="/tags.html#score-matching-ref">score matching
+                            <span>3</span>
 </a></li>
                     </ul>
                 </div>
