@@ -14,12 +14,12 @@
 
 <meta property="og:title" content="Score-Based Generative Modeling through Stochastic Differential Equations "/>
 <meta property="og:url" content="/score-based-generative-modeling-through-stochastic-differential-equations.html" />
-<meta property="og:description" content="概述 Using SDE and reverse-time SDE in continous domain. Generalize Score matching and Diffusion to inifinite T. Two SDEs to use Train like Denoising Score Matching or DDPM. Sliced Score matching also works. Inference/Generation: Propose Predictor-Corrector sampler (SDE Solver + MCMC) Propose a Deterministic sampler, call “probability flow ordinary …" />
+<meta property="og:description" content="概述 Using SDE and reverse-time SDE to extend to continous domain. 使用SDE及反向SDE，将时间T 推广到 连续域 Generalize Score matching and Diffusion to inifinite T. 统一 score matching 和 扩散模型， 并将时间 T 推广到 …" />
 <meta property="og:site_name" content="ThinkNotClear" />
 <meta property="og:article:author" content="ThinkNotClear" />
 <meta property="og:article:published_time" content="2022-09-21T00:00:00+08:00" />
 <meta name="twitter:title" content="Score-Based Generative Modeling through Stochastic Differential Equations ">
-<meta name="twitter:description" content="概述 Using SDE and reverse-time SDE in continous domain. Generalize Score matching and Diffusion to inifinite T. Two SDEs to use Train like Denoising Score Matching or DDPM. Sliced Score matching also works. Inference/Generation: Propose Predictor-Corrector sampler (SDE Solver + MCMC) Propose a Deterministic sampler, call “probability flow ordinary …">
+<meta name="twitter:description" content="概述 Using SDE and reverse-time SDE to extend to continous domain. 使用SDE及反向SDE，将时间T 推广到 连续域 Generalize Score matching and Diffusion to inifinite T. 统一 score matching 和 扩散模型， 并将时间 T 推广到 …">
 
 
         <title>Score-Based Generative Modeling through Stochastic Differential Equations  · ThinkNotClear
@@ -142,14 +142,14 @@
                         
 <h1 id="_1">概述</h1>
 <ol>
-<li>Using SDE and reverse-time SDE in continous domain.</li>
-<li>Generalize Score matching and Diffusion to inifinite T.</li>
-<li>Two SDEs to use</li>
-<li>Train like Denoising Score Matching or DDPM.  Sliced Score matching also works.</li>
-<li>Inference/Generation: Propose Predictor-Corrector sampler (SDE Solver + MCMC)</li>
-<li>Propose a Deterministic sampler, call “probability flow ordinary DE (ODE)”.</li>
-<li>Architecture Improvements</li>
-<li>class-conditional generation, image imputation and colorization</li>
+<li>Using SDE and reverse-time SDE to extend to continous domain.  使用SDE及反向SDE，将时间T 推广到 连续域</li>
+<li>Generalize Score matching and Diffusion to inifinite T.  统一 score matching 和 扩散模型， 并将时间 T 推广到 无限</li>
+<li>Two SDEs derived from 2 Markov chain to use 两个具体的SDE， 分别来自不同的Markov chain, 其中一个是 DDPM使用的chain.</li>
+<li>Train like Denoising Score Matching or DDPM.  Sliced Score matching also works. 训练方式与 denoising score matching/DDPM 很相似</li>
+<li>Inference/Generation: 1. General SDE sampler using the corresponding reverse-time SDE. 2. Propose Predictor-Corrector sampler (SDE Solver + MCMC)  生成过程 1. 使用常用的SDE数值解法， 2. 提出 用 score-based MCMC 改进</li>
+<li>Propose a Deterministic sampler, call “probability flow ordinary DE (ODE)”. 提出确定性采样器来生成， 好处有多</li>
+<li>Architecture Improvements 结构改进</li>
+<li>class-conditional generation, image imputation and colorization， 实现可控制生成， 基于又一个SDE。</li>
 </ol>
 <h1 id="unified-framework">Unified Framework</h1>
 <p>The authors proposed a unified framework generalizes score matching <a href="/ncsn-generative-modeling-by-estimating-gradients-of-the-data-distribution.html">NCSN</a>  and <a href="/ddpm-denoising-diffusion-probabilistic-models.html">DDPM</a></p>
